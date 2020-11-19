@@ -22,6 +22,9 @@ public class CheckListsHelper extends PageBase {
     WebElement returnButton;
     @FindBy(id="com.flt.checklist:id/list_title")
     List<WebElement> checkLists;
+    @FindBy(id="com.flt.checklist:id/list_delete")
+    List<WebElement> deleteButtonList;
+
 
     public CheckListsHelper(WebDriver driver) {
         super(driver);
@@ -37,18 +40,32 @@ public class CheckListsHelper extends PageBase {
     }
 
     public void createCheckList(String name) {
-        plusButton.click();
-        waitUntilElementIsClickable(okButton,10);
-        waitUntilElementIsClickable(nameField,10);
-        editField(nameField,name);
-        okButton.click();
+        this.createCheckListNoReturn(name);
         waitUntilElementIsClickable(returnButton,5);
         returnButton.click();
         this.waitUntilPageIsLoaded();
     }
 
+    public void createCheckListNoReturn(String name) {
+        plusButton.click();
+        waitUntilElementIsClickable(okButton, 10);
+        waitUntilElementIsClickable(nameField, 10);
+        editField(nameField, name);
+        okButton.click();
+    }
+
+
+
     public int getListsQuantity() {
         return checkLists.size();
+    }
+
+    public void deleteFirstCheckList(){
+        this.waitUntilElementsAreVisible(deleteButtonList,10);
+        deleteButtonList.get(0).click();
+        this.waitUntilElementIsClickable(okButton,10);
+        okButton.click();
+        this.waitUntilElementIsInvisible(okButton,10);
     }
 
 

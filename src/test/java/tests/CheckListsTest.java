@@ -8,16 +8,19 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import pages.CheckListsHelper;
+import pages.CurrentCheckListHelper;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 
 public class CheckListsTest extends TestBase{
     CheckListsHelper checkListsPage;
+    CurrentCheckListHelper currentListPage;
 
     @BeforeMethod
     public void initTests(){
         checkListsPage = PageFactory.initElements(driver,CheckListsHelper.class);
+        currentListPage = PageFactory.initElements(driver, CurrentCheckListHelper.class);
         checkListsPage.waitUntilPageIsLoaded();
     }
 
@@ -38,15 +41,49 @@ public class CheckListsTest extends TestBase{
     }
 
     @Test
-    public void createCheckListAndRotate(){
+    public void createCheckListAndRotate() {
         int firstListQuantity = checkListsPage.getListsQuantity();
         System.out.println("firstListQuantity: " + firstListQuantity);
         checkListsPage.rotateScreenLandScape();
+        checkListsPage.waitUntilPageIsLoaded();
         checkListsPage.createCheckList("AfterRotationm");
         int landscapeListQuantity = checkListsPage.getListsQuantity();
-        Assert.assertEquals(firstListQuantity+1,landscapeListQuantity);
+        Assert.assertEquals(firstListQuantity + 1, landscapeListQuantity);
         checkListsPage.rotateScreenPortrait();
+        checkListsPage.waitUntilPageIsLoaded();
         int portraitListQuantity = checkListsPage.getListsQuantity();
-        Assert.assertEquals(firstListQuantity+1,portraitListQuantity);
+        Assert.assertEquals(firstListQuantity + 1, portraitListQuantity);
+    }
+
+    @Test
+    public void deleteFirstCheckList(){
+        int firstListQuantity = checkListsPage.getListsQuantity();
+        if (firstListQuantity == 0) checkListsPage.createCheckList("FirstCheckList");
+        firstListQuantity = checkListsPage.getListsQuantity();
+        checkListsPage.deleteFirstCheckList();
+        int lastListQuantity = checkListsPage.getListsQuantity();
+        Assert.assertEquals(firstListQuantity-1,lastListQuantity);
+    }
+    @Test
+    public void createNotEmptyCheckList(){
+        int firstListQuantity = checkListsPage.getListsQuantity();
+        checkListsPage.createCheckListNoReturn("FirstNotEmptyChList");
+        currentListPage.addItem("fiestItem");
+        currentListPage.returnToCheckLists();
+        checkListsPage.waitUntilPageIsLoaded();
+        int lastQuantityNoRotation = checkListsPage.getListsQuantity();
+        checkListsPage.rotateScreenLandScape();
+        checkListsPage.createCheckListNoReturn("FirstNotEmptyChList");
+        currentListPage.addItem("secondItem");
+        currentListPage.returnToCheckLists();
+        checkListsPage.waitUntilPageIsLoaded();
+        int afterLanscapeRotation = checkListsPage.getListsQuantity();
+        currentListPage.rotateScreenPortrait();
+        checkListsPage.waitUntilPageIsLoaded();
+        int finalCheckLists = checkListsPage.getListsQuantity();
+        Assert.assertEquals(firstListQuantity + 1, lastQuantityNoRotation);
+        Assert.assertEquals(firstListQuantity + 2, afterLanscapeRotation);
+        Assert.assertEquals(afterLanscapeRotation, finalCheckLists);
+
     }
 }

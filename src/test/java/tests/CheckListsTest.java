@@ -17,19 +17,19 @@ public class CheckListsTest extends TestBase{
     CheckListsHelper checkListsPage;
     CurrentCheckListHelper currentListPage;
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void initTests(){
         checkListsPage = PageFactory.initElements(driver,CheckListsHelper.class);
         currentListPage = PageFactory.initElements(driver, CurrentCheckListHelper.class);
         checkListsPage.waitUntilPageIsLoaded();
     }
 
-    @Test
+    @Test(groups = {"smoke","regression"})
     public void isCorrectScreen(){
         Assert.assertEquals("Check List", checkListsPage.getHeaderText());
     }
 
-    @Test
+    @Test(groups = {"regression"})
     public void createCheckList()  {
         int firstListQuantity = checkListsPage.getListsQuantity();
         System.out.println("firstListQuantity: " + firstListQuantity);
@@ -50,7 +50,7 @@ public class CheckListsTest extends TestBase{
     }
 
 
-    @Test
+    @Test(groups = {"smoke"})
     public void createCheckListAndRotate() {
         int firstListQuantity = checkListsPage.getListsQuantity();
         System.out.println("firstListQuantity: " + firstListQuantity);

@@ -12,7 +12,7 @@ import java.net.URL;
 public class TestBase {
     public AppiumDriver driver;
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void startUp() throws MalformedURLException {
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability("platformName","Android");
@@ -27,7 +27,7 @@ public class TestBase {
         driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"),capabilities);
     }
 
-    @AfterMethod
+    @AfterMethod(alwaysRun = true)
     public void tearDown(){
         driver.quit();
     }

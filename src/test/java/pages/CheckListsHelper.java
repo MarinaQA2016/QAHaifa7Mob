@@ -7,6 +7,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.time.Duration;
 import java.util.List;
 
 public class CheckListsHelper extends PageBase {
@@ -67,6 +68,7 @@ public class CheckListsHelper extends PageBase {
         okButton.click();
         this.waitUntilElementIsInvisible(okButton,10);
     }
+
 
 
 }

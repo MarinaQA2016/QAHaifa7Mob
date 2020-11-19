@@ -41,6 +41,16 @@ public class CheckListsTest extends TestBase{
     }
 
     @Test
+    public void createCheckListGoToBackGround(){
+        int firstListQuantity = checkListsPage.getListsQuantity();
+        checkListsPage.createCheckList("ChList");
+        checkListsPage.runBackGround(2);
+        int lastListQuantity = checkListsPage.getListsQuantity();
+        Assert.assertEquals(firstListQuantity+1,lastListQuantity);
+    }
+
+
+    @Test
     public void createCheckListAndRotate() {
         int firstListQuantity = checkListsPage.getListsQuantity();
         System.out.println("firstListQuantity: " + firstListQuantity);
@@ -56,6 +66,15 @@ public class CheckListsTest extends TestBase{
     }
 
     @Test
+    public void createCheckListAndSwipeIt(){
+        checkListsPage.createCheckListNoReturn("FirstNotEmptyChList");
+        for(int i=0; i<15; i++) currentListPage.addItem("item" + i);
+        currentListPage.swipeUpToLastCheckList(15);
+        currentListPage.returnToCheckLists();
+
+    }
+
+    @Test
     public void deleteFirstCheckList(){
         int firstListQuantity = checkListsPage.getListsQuantity();
         if (firstListQuantity == 0) checkListsPage.createCheckList("FirstCheckList");
@@ -68,14 +87,14 @@ public class CheckListsTest extends TestBase{
     public void createNotEmptyCheckList(){
         int firstListQuantity = checkListsPage.getListsQuantity();
         checkListsPage.createCheckListNoReturn("FirstNotEmptyChList");
-        currentListPage.addItem("fiestItem");
-        currentListPage.returnToCheckLists();
+        currentListPage.addItem("fiestItem")
+                .returnToCheckLists();
         checkListsPage.waitUntilPageIsLoaded();
         int lastQuantityNoRotation = checkListsPage.getListsQuantity();
         checkListsPage.rotateScreenLandScape();
         checkListsPage.createCheckListNoReturn("FirstNotEmptyChList");
-        currentListPage.addItem("secondItem");
-        currentListPage.returnToCheckLists();
+        currentListPage.addItem("secondItem")
+                .returnToCheckLists();
         checkListsPage.waitUntilPageIsLoaded();
         int afterLanscapeRotation = checkListsPage.getListsQuantity();
         currentListPage.rotateScreenPortrait();
